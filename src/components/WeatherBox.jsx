@@ -4,7 +4,8 @@ import rainImage from '../images/rain.png';
 import snowImage from '../images/snow.png';
 import cloudImage from '../images/cloud.png';
 import mistImage from '../images/mist.png';
-export default function WeatherBox({ temperature, description, main, error }) {
+import smokeImage from '../images/smoke.png';
+export default function WeatherBox({ temperature, description, main, style }) {
   const getImageSrc = (main) => {
     switch (main) {
       case 'Clear':
@@ -17,14 +18,16 @@ export default function WeatherBox({ temperature, description, main, error }) {
         return cloudImage;
       case 'Haze':
         return mistImage;
+      case 'Smoke':
+        return smokeImage;
       default:
         return '';
     }
   };
   return (
-    <div className='weather-box'>
+    <div className={`weather-box ${style}`}>
       <img src={getImageSrc(main)} />
-      <p className="temperature"> {temperature}°C</p>
+      <p className="temperature">{temperature}<span>°C</span></p>
       <p className="description">{description}</p>
     </div>
   )

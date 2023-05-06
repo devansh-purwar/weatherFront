@@ -6,7 +6,6 @@ import { useState } from 'react'
 import NotFound from "./NotFound"
 import WeatherBox from './WeatherBox'
 import WeatherDetail from "./WeatherDetail"
-import './SearchBox.css'
 export default function SearchBox() {
     const [notFound, setNotFound] = useState(false);
     const [location, setLocation] = new useState("")
@@ -15,7 +14,10 @@ export default function SearchBox() {
     const [main, setMain] = useState('');
     const [humidity, setHumidity] = useState('');
     const [wind, setWind] = useState('');
-    const apiUrl = "http://127.0.0.1:8000/"
+    const [style1, setStyle1] = useState('')
+    const [style2, setStyle2] = useState('')
+    const [style3, setStyle3] = useState('')
+    const apiUrl = "/api"
     const { postData, data } = useFetch(apiUrl, 'POST')
     const handleSearch = async (e) => {
         e.preventDefault()
@@ -28,6 +30,15 @@ export default function SearchBox() {
         console.log(data)
         if (data) {
             if (data.cod === '404') {
+
+                // container.style.height = '400px';
+                // weatherBox.style.display = 'none';
+                // weatherDetails.style.display = 'none';
+                // error404.style.display = 'block';
+                // error404.classList.add('fadeIn');
+                setStyle1('style1')
+                setStyle2('style2')
+                setStyle3('style3 fadeIn')
                 setNotFound(true)
                 setWind('')
                 setDescription('')
@@ -36,6 +47,9 @@ export default function SearchBox() {
                 setMain('')
                 return
             }
+            setStyle1('style5')
+            setStyle2('fadeIn')
+            setStyle3('')
             setWind(data.wind)
             setDescription(data.description)
             setTemperature(data.temperature)
@@ -47,9 +61,9 @@ export default function SearchBox() {
     }, [data])
 
     return (
-        <div className="container" style={{ margin: "auto" }}>
-            <form onSubmit={handleSearch} >
-                <FontAwesomeIcon icon={faLocationDot} />
+        <div className={`container ${style1}`}>
+            <form onSubmit={handleSearch} className="search-box" >
+                <i><FontAwesomeIcon icon={faLocationDot} /></i>
                 <input
                     type="text"
                     placeholder="Enter your location"
@@ -57,11 +71,11 @@ export default function SearchBox() {
                     value={location}
                     name='city'
                 />
-                <button type="submit"><FontAwesomeIcon icon={faMagnifyingGlass} /></button>
+                <button type="submit"><FontAwesomeIcon icon={faMagnifyingGlass} fontSize={"22px"} /></button>
             </form>
-            {notFound && <NotFound notFound={notFound} />}
-            {!notFound && data && <WeatherBox temperature={temperature} description={description} main={main} />}
-            {!notFound && data && <WeatherDetail humidity={humidity} wind={wind} />}
+            {notFound && <NotFound notFound={notFound} style={style3} />}
+            {!notFound && data && <WeatherBox temperature={temperature} description={description} main={main} style={style2} />}
+            {!notFound && data && <WeatherDetail humidity={humidity} wind={wind} style={style2} />}
         </div>
     )
 }
